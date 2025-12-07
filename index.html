@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام تحليل التداول المتقدم - Binance Spot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- شريط التنقل -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                <span>نظام تحليل Binance Spot</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#dashboard" class="active"><i class="fas fa-home"></i> لوحة التحكم</a>
+                <a href="#analysis"><i class="fas fa-search"></i> تحليل فوري</a>
+                <a href="#coins"><i class="fas fa-coins"></i> العملات</a>
+                <a href="#strategy"><i class="fas fa-chess"></i> الاستراتيجية</a>
+                <a href="#backtest"><i class="fas fa-history"></i> اختبار التاريخ</a>
+            </div>
+            <div class="market-status">
+                <span id="fear-greed">مؤشر الخوف والطمع: <span class="value">25</span></span>
+                <span class="status-indicator active"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- لوحة التحكم الرئيسية -->
+    <main class="container">
+        <section id="dashboard" class="dashboard">
+            <h1><i class="fas fa-bullseye"></i> نظام التداول الآلي - إستراتيجية 5 دقائق</h1>
+            
+            <div class="stats-grid">
+                <!-- بطاقة مؤشر الخوف والطمع -->
+                <div class="stat-card fear-greed">
+                    <h3><i class="fas fa-brain"></i> مؤشر الخوف والطمع</h3>
+                    <div class="gauge">
+                        <div class="gauge-fill" style="width: 28%"></div>
+                    </div>
+                    <div class="gauge-labels">
+                        <span>خوف شديد</span>
+                        <span class="current-range">20-35 (مثالي)</span>
+                        <span>طمع شديد</span>
+                    </div>
+                    <p class="status">✅ النسبة الحالية ضمن النطاق المثالي للشراء</p>
+                </div>
+
+                <!-- بطاقة الفريم الزمني -->
+                <div class="stat-card timeframe">
+                    <h3><i class="fas fa-clock"></i> الإطار الزمني</h3>
+                    <div class="timeframe-display">
+                        <div class="selected">5 دقائق</div>
+                        <div>15 دقيقة</div>
+                        <div>1 ساعة</div>
+                        <div>4 ساعات</div>
+                    </div>
+                    <p class="desc">تحليل الشموع اليابانية على فريم 5 دقائق</p>
+                </div>
+
+                <!-- بطاقة نمط الشموع -->
+                <div class="stat-card patterns">
+                    <h3><i class="fas fa-shapes"></i> أنماط الشموع المطلوبة</h3>
+                    <ul class="pattern-list">
+                        <li class="active">شمعة ماروبوزو بيضاء</li>
+                        <li class="active">نمط Engulfing صعودي</li>
+                        <li>Hammer</li>
+                        <li>Morning Star</li>
+                    </ul>
+                </div>
+
+                <!-- بطاقة إدارة المخاطر -->
+                <div class="stat-card risk">
+                    <h3><i class="fas fa-shield-alt"></i> إدارة المخاطر</h3>
+                    <div class="risk-params">
+                        <div class="param">
+                            <span>وقف الخسارة:</span>
+                            <span class="value">1-2%</span>
+                        </div>
+                        <div class="param">
+                            <span>نسبة الربح/خسارة:</span>
+                            <span class="value">2:1</span>
+                        </div>
+                        <div class="param">
+                            <span>الحجم المثالي:</span>
+                            <span class="value">2% من رأس المال</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- مخطط التحليل -->
+            <div class="chart-section">
+                <h3><i class="fas fa-chart-bar"></i> تحليل DENT/USDT المباشر</h3>
+                <div class="chart-container">
+                    <canvas id="priceChart"></canvas>
+                </div>
+                <div class="trade-signal">
+                    <div class="signal buy">
+                        <h4>إشارة شراء حالية</h4>
+                        <p>DENT/USDT</p>
+                        <div class="price-info">
+                            <div class="price-row">
+                                <span>سعر الشراء:</span>
+                                <span class="price">0.000123</span>
+                            </div>
+                            <div class="price-row">
+                                <span>هدف البيع:</span>
+                                <span class="price target">0.000130</span>
+                            </div>
+                            <div class="price-row">
+                                <span>وقف الخسارة:</span>
+                                <span class="price stop">0.000121</span>
+                            </div>
+                            <div class="price-row">
+                                <span>النقاط المتوقعة:</span>
+                                <span class="points">+7 نقاط</span>
+                            </div>
+                        </div>
+                        <button class="execute-btn" onclick="executeTrade()">
+                            <i class="fas fa-play"></i> تنفيذ الصفقة
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- معايير التداول -->
+            <div class="criteria-section">
+                <h3><i class="fas fa-checklist"></i> معايير التداول الإلزامية</h3>
+                <div class="criteria-grid">
+                    <div class="criterion">
+                        <i class="fas fa-chart-bar"></i>
+                        <h4>حجم التداول خلال 24 ساعة</h4>
+                        <p>يجب أن يكون فوق 1 مليون USDT</p>
+                        <span class="status active">✅ مطابق</span>
+                    </div>
+                    <div class="criterion">
+                        <i class="fas fa-users"></i>
+                        <h4>صانعو السوق</h4>
+                        <p>وجود صانعي سوق نشطين</p>
+                        <span class="status active">✅ مطابق</span>
+                    </div>
+                    <div class="criterion">
+                        <i class="fas fa-balance-scale"></i>
+                        <h4>السيولة</h4>
+                        <p>فارق سعر العرض/الطلب أقل من 0.1%</p>
+                        <span class="status active">✅ مطابق</span>
+                    </div>
+                    <div class="criterion">
+                        <i class="fas fa-history"></i>
+                        <h4>عمر التداول</h4>
+                        <p>أكثر من 6 أشهر في السوق</p>
+                        <span class="status active">✅ مطابق</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم العملات -->
+        <section id="coins" class="coins-section">
+            <h2><i class="fas fa-coins"></i> قائمة العملات المتابعة (90 عملة)</h2>
+            <div class="filters">
+                <input type="text" id="coinSearch" placeholder="ابحث عن عملة...">
+                <select id="timeframeFilter">
+                    <option value="5m">5 دقائق</option>
+                    <option value="15m">15 دقيقة</option>
+                    <option value="1h">ساعة</option>
+                </select>
+                <button onclick="filterCoins()"><i class="fas fa-filter"></i> تصفية</button>
+            </div>
+            
+            <div class="coins-grid" id="coinsContainer">
+                <!-- سيتم ملؤها بواسطة JavaScript -->
+            </div>
+        </section>
+
+        <!-- قسم المؤشرات الفنية -->
+        <section id="indicators" class="indicators-section">
+            <h2><i class="fas fa-tachometer-alt"></i> المؤشرات الفنية المستخدمة</h2>
+            <div class="indicators-container">
+                <div class="indicator-group">
+                    <h4>مؤشرات الزخم (Momentum)</h4>
+                    <div class="indicator-item">RSI (Relative Strength Index)</div>
+                    <div class="indicator-item">Stochastic Oscillator</div>
+                    <div class="indicator-item">MACD</div>
+                </div>
+                <div class="indicator-group">
+                    <h4>مؤشرات التقلب (Volatility)</h4>
+                    <div class="indicator-item">Bollinger Bands (BB)</div>
+                    <div class="indicator-item">Average True Range (ATR)</div>
+                </div>
+                <div class="indicator-group">
+                    <h4>مؤشرات الحجم (Volume)</h4>
+                    <div class="indicator-item">On-Balance Volume (OBV)</div>
+                    <div class="indicator-item">Volume Profile</div>
+                    <div class="indicator-item">VWAP</div>
+                </div>
+                <div class="indicator-group">
+                    <h4>نماذج الذكاء الاصطناعي</h4>
+                    <div class="indicator-item">Machine Learning Models</div>
+                    <div class="indicator-item">Reinforcement Learning (RL)</div>
+                    <div class="indicator-item">GARCH Models</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم استراتيجية التداول -->
+        <section id="strategy" class="strategy-section">
+            <h2><i class="fas fa-chess-knight"></i> استراتيجية التداول التفصيلية</h2>
+            <div class="strategy-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>مراقبة مؤشر الخوف والطمع</h4>
+                        <p>الانتظار حتى يصل المؤشر إلى النطاق 20-35 (خوف معتدل)</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>فحص الشمعة على فريم 5 دقائق</h4>
+                        <p>البحث عن شمعة ماروبوزو بيضاء أو نمط Engulfing صعودي</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>التحقق من المعايير الأساسية</h4>
+                        <p>حجم التداول، السيولة، عمر العملة، صانعو السوق</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>تحديد نقاط الدخول والخروج</h4>
+                        <p>الدخول عند Ask، وضع Stop Loss عند 1-2%، Take Profit عند 7 نقاط</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h4>المراقبة المستمرة والتعديل</h4>
+                        <p>تعديل الاستراتيجية حسب ظروف السوق لتحقيق 90% نجاح</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- الفوتر -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4><i class="fas fa-exclamation-triangle"></i> تحذير المخاطرة</h4>
+                <p>التداول في الأسواق المالية يحمل مخاطر الخسارة. هذا النظام لأغراض تعليمية وتحليلية.</p>
+            </div>
+            <div class="footer-section">
+                <h4><i class="fas fa-cogs"></i> التقنيات المستخدمة</h4>
+                <p>HTML5, CSS3, JavaScript, Chart.js, Binance API</p>
+            </div>
+            <div class="footer-section">
+                <h4><i class="fas fa-bullseye"></i> هدف النظام</h4>
+                <p>تحقيق 90% نسبة نجاح في صفقات السبوت على منصة Binance</p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>© 2025 نظام تحليل التداول المتقدم - Binance Spot Strategy | HAMMOU2310</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
